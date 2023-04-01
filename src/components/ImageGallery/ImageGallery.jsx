@@ -31,31 +31,31 @@ const ImageGallery = ({ propRequest }) => {
       return;
     }
 
+    const setGalleryCards = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const data = await getSearchGalleryApi(request, page);
+
+        if (data.hits.length === 0) {
+          setCards([]);
+
+          toast.error(`no response on request ${request}`);
+          throw new Error();
+        }
+
+        setCards(prev => (page === 1 ? data.hits : [...prev, ...data.hits]));
+        setTotalHits(data.totalHits);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     setGalleryCards();
   }, [request, page]);
-
-  const setGalleryCards = async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const data = await getSearchGalleryApi(request, page);
-
-      if (data.hits.length === 0) {
-        setCards([]);
-
-        toast.error(`no response on request ${request}`);
-        throw new Error();
-      }
-
-      setCards(prev => (page === 1 ? data.hits : [...prev, ...data.hits]));
-      setTotalHits(data.totalHits);
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const openModal = modalData => {
     setModalData(modalData);
