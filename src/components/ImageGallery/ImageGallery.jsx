@@ -43,6 +43,7 @@ const ImageGallery = ({ propRequest }) => {
 
       if (data.hits.length === 0) {
         setCards([]);
+
         toast.error(`no response on request ${request}`);
         throw new Error();
       }
